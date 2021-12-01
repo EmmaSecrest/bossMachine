@@ -11,7 +11,8 @@ const minionsRouter = express.Router();
     deleteAllFromDatabase,
   } = require('./db');
     
-  //assemble the minions!
+  //Assemble the minions!
+  //this works 
   minionsRouter.get('/',(req,res,next) => {
     const allMinions = getAllFromDatabase('minions');
     res.status(200).send(allMinions);
