@@ -19,7 +19,7 @@ const minionsRouter = express.Router();
   });
 // Find a minion by an id
 minionsRouter.get('/:minionId' , (req,res,next) => {
-  const minionIndex = String(req.params.minionId)
+  const minionIndex = req.params.minionId
   const requestedMinion = getFromDatabaseById('minions' , minionIndex)
   if(requestedMinion) {
     res.send(requestedMinion)
@@ -33,6 +33,22 @@ minionsRouter.post('/' ,(req,res,next) => {
   const newMinion = req.body
   addToDatabase('minions' , newMinion)
   res.status(201).send(newMinion)
+})
+
+// updating a minion
+// not sure why the first test fails
+minionsRouter.put('/:minionId' , (req,res,next) => {
+  const minionIDtoCheck = req.params.minionId;
+  const minionNeedsCorrected = getFromDatabaseById('minions', minionIDtoCheck)
+  const updatedMinion = req.body;
+  
+  if(minionNeedsCorrected){
+  const correctedMinion = updateInstanceInDatabase('minions' , updatedMinion)
+  res.status(204).send(correctedMinion)
+  } else{
+    res.status(404).send()
+  }
+  
 })
 
 
