@@ -12,11 +12,11 @@ const minionsRouter = express.Router();
   } = require('./db');
   
     
-  //Assemble the minions!
+ //Assemble the minions!
    minionsRouter.get('/',(req,res,next) => {
     const allMinions = getAllFromDatabase('minions');
      res.status(200).send(allMinions);
-});
+  });
 // Find a minion by an id
 minionsRouter.get('/:minionId' , (req,res,next) => {
   const minionIndex = String(req.params.minionId)
@@ -26,6 +26,13 @@ minionsRouter.get('/:minionId' , (req,res,next) => {
   } else {
     res.status(404).send()
   }
+})
+
+// create a new minion
+minionsRouter.post('/' ,(req,res,next) => {
+  const newMinion = req.body
+  addToDatabase('minions' , newMinion)
+  res.status(201).send(newMinion)
 })
 
 
