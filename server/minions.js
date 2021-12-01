@@ -1,4 +1,5 @@
 const express = require('express');
+const app = require('../server');
 const minionsRouter = express.Router();
 
  const {
@@ -12,20 +13,29 @@ const minionsRouter = express.Router();
   } = require('./db');
   
     
- //Assemble the minions!
-   minionsRouter.get('/',(req,res,next) => {
-    const allMinions = getAllFromDatabase('minions');
-     res.status(200).send(allMinions);
-  });
+ // DRY the minions
+ minionsRouter.param('minionId' , (req,res,next,id) => {
+  // const minionIndex = req.params.minionId
+  
+  const requestedMinion = getFromDatabaseById('minions' , id)
+   if(requestedMinion) {
+    req.minion = requestedMinion
+    next()
+   } else {
+     res.status(404).send()
+   }
+ })
+ 
+ 
+//Assemble the minions!
+  minionsRouter.get('/',(req,res,next) => {
+  const allMinions = getAllFromDatabase('minions');
+    res.status(200).send(allMinions);
+});
 // Find a minion by an id
 minionsRouter.get('/:minionId' , (req,res,next) => {
-  const minionIndex = req.params.minionId
-  const requestedMinion = getFromDatabaseById('minions' , minionIndex)
-  if(requestedMinion) {
-    res.send(requestedMinion)
-  } else {
-    res.status(404).send()
-  }
+  res.send(req.minion)
+  
 })
 
 // create a new minion
@@ -38,30 +48,19 @@ minionsRouter.post('/' ,(req,res,next) => {
 // updating a minion
 // not sure why the first test fails
 minionsRouter.put('/:minionId' , (req,res,next) => {
-  const minionIDtoCheck = req.params.minionId;
-  const minionNeedsCorrected = getFromDatabaseById('minions', minionIDtoCheck)
+ 
   const updatedMinion = req.body;
-  
-  if(minionNeedsCorrected){
   const correctedMinion = updateInstanceInDatabase('minions' , updatedMinion)
   res.status(204).send(correctedMinion)
-  } else{
-    res.status(404).send()
-  }
-  
+ 
 })
 
 // deleting a minion by its ID 
 minionsRouter.delete('/:minionId', (req,res,next) => {
-  const checkMinionId = req.params.minionId;
-  const minionToFire = getFromDatabaseById('minions', checkMinionId)
-
-  if(minionToFire) {
-    deleteAllFromDatabase('minions' , minionToFire)
+ 
+    deleteAllFromDatabase('minions' , req.minion)
     res.status(204).send()
-  } else {
-    res.status(404).send()
-  }
+ 
 
 })
 
