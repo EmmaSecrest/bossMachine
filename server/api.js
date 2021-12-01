@@ -1,9 +1,8 @@
 const express = require('express');
-
 const apiRouter = express.Router();
 
-//starting the router
-
-
+//mounting minions to a path
+ const minionRouter = require('./minions');
+ apiRouter.use('/minions', minionRouter);
 
 module.exports = apiRouter;
