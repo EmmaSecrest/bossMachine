@@ -11,10 +11,13 @@ module.exports = app;
 */
 const PORT = process.env.PORT || 4001;
 
-// Add middleware for handling CORS requests from index.html
-app.use(cors());
+//to actually get the page to show up 
+app.use('/public', express.static('public'));
+app.get('/', (req, res, next) => { 
+  res.sendFile('index.html', { root: __dirname });
+});
 
-// Add middleware for parsing request bodies here:
+app.use(cors());
 app.use(bodyParser.json());
 
 // Mount your existing apiRouter below at the '/api' path.
