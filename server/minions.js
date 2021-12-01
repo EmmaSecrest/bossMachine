@@ -1,21 +1,23 @@
 const express = require('express');
-const minionRouter = express.Router({mergeParams:true});
+const minionsRouter = express.Router();
 
-const { 
-    addToDatabase,
+ const {
+    createMeeting,
     getAllFromDatabase,
     getFromDatabaseById,
+    addToDatabase,
     updateInstanceInDatabase,
     deleteFromDatabasebyId,
+    deleteAllFromDatabase,
   } = require('./db');
+    
+  //assemble the minions!
+  minionsRouter.get('/',(req,res,next) => {
+    const allMinions = getAllFromDatabase('minions');
+    res.status(200).send(allMinions);
+});
 
+//exported minionsRouter below
+module.exports = minionsRouter;
+  
  
-  
-  // Assemble the Minions!
-minionRouter.get('/' , (req,res,next) => {
-    console.log('I got to here!')
-    const minions = getAllFromDatabase('minions')
-    res.status(200).send(minions)
-   })
-  
-   module.exports = minionRouter;
