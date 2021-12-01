@@ -1,5 +1,8 @@
 const express = require('express');
 const app = express();
+const bodyParser = require('body-parser')
+const cors = require('cors')
+const apiRouter = require('./server/api');
 
 module.exports = app;
 
@@ -8,18 +11,19 @@ module.exports = app;
 */
 const PORT = process.env.PORT || 4001;
 
-// Add middleware for handling CORS requests from index.html
-
-
-// Add middware for parsing request bodies here:
-
+//the server Boilerplate
+app.use(bodyParser.json())
+app.use(cors())
 
 // Mount your existing apiRouter below at the '/api' path.
-const apiRouter = require('./server/api');
-
+app.use('./server/api.js',apiRouter)
 
 // This conditional is here for testing purposes:
 if (!module.parent) { 
   // Add your code to start the server listening at PORT below:
-
-}
+  
+  app.listen(PORT, () => {
+    console.log(`Server listening at http://localhost:${PORT}`)
+  })
+  }
+ 
