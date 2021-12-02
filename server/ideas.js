@@ -32,6 +32,25 @@ ideasRouter.get("/:ideaId" , (req,res,next) => {
     res.send(req.idea)
 })
 
+//create a new idea
+ideasRouter.post("/" , (req,res,next) => {
+    const newIdea = req.body;
+    addToDatabase("ideas",newIdea)
+    res.status(201).send(newIdea)
+})
+
+//updating an idea 
+ideasRouter.put('/:ideaId' , (req,res,next) => {
+    const updatedIdea = req.body;
+    const correctedIdea = updateInstanceInDatabase('ideas' , updatedIdea);
+    res.status(204).send(correctedIdea);
+})
+
+// deleting an idea by the id 
+ideasRouter.delete("/:ideaId" , (req,res,next) => {
+    deleteFromDatabasebyId('ideas' , req.params.ideaId)
+    res.status(204).send()
+})
 
 //export ideas
 module.exports = ideasRouter
