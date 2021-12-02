@@ -50,7 +50,7 @@ minionsRouter.put('/:minionId' , (req,res,next) => {
  
   const updatedMinion = req.body;
   const correctedMinion = updateInstanceInDatabase('minions' , updatedMinion)
-  res.status(204).send(correctedMinion)
+  res.send(correctedMinion)
  
 })
 

@@ -9,6 +9,7 @@ const {
     deleteFromDatabasebyId,
     deleteAllFromDatabase,
   } = require('./db');
+  const checkMillionDollarIdea = require("./checkMillionDollarIdea")
 
 //DRY the ideas
 ideasRouter.param('ideaId' , (req,res,next,id) => {
@@ -20,6 +21,8 @@ ideasRouter.param('ideaId' , (req,res,next,id) => {
         res.status(404).send()
     }
 })
+
+
 
 // stealing all the ideas
 ideasRouter.get('/' , (req,res,next) => {
@@ -33,17 +36,17 @@ ideasRouter.get("/:ideaId" , (req,res,next) => {
 })
 
 //create a new idea
-ideasRouter.post("/" , (req,res,next) => {
+ideasRouter.post("/" , checkMillionDollarIdea,(req,res,next) => {
     const newIdea = req.body;
     addToDatabase("ideas",newIdea)
     res.status(201).send(newIdea)
 })
 
 //updating an idea 
-ideasRouter.put('/:ideaId' , (req,res,next) => {
+ideasRouter.put('/:ideaId' ,checkMillionDollarIdea ,(req,res,next) => {
     const updatedIdea = req.body;
     const correctedIdea = updateInstanceInDatabase('ideas' , updatedIdea);
-    res.status(204).send(correctedIdea);
+    res.send(correctedIdea);
 })
 
 // deleting an idea by the id 
@@ -51,6 +54,8 @@ ideasRouter.delete("/:ideaId" , (req,res,next) => {
     deleteFromDatabasebyId('ideas' , req.params.ideaId)
     res.status(204).send()
 })
+
+
 
 //export ideas
 module.exports = ideasRouter
