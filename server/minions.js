@@ -1,5 +1,4 @@
 const express = require('express');
-const app = require('../server');
 const minionsRouter = express.Router();
 
  const {
@@ -58,7 +57,7 @@ minionsRouter.put('/:minionId' , (req,res,next) => {
 // deleting a minion by its ID 
 minionsRouter.delete('/:minionId', (req,res,next) => {
  
-    deleteAllFromDatabase('minions' , req.minion)
+    deleteFromDatabasebyId('minions' , req.params.minionId)
     res.status(204).send()
  
 
